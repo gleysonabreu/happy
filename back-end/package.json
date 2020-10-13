@@ -25,6 +25,7 @@
       "typeorm": "0.2.25"
    },
    "scripts": {
-      "start": "ts-node --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts"
-   }
+      "start": "ts-node --transpile-only --ignore-watch node_modules src/shared/infra/http/server.ts",
+      "typeorm": "ts-node ./node_modules/typeorm/cli.js"
+    }
 }
