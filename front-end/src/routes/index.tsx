@@ -11,8 +11,8 @@ function MainRoutes() {
       <Routes>
         <Route path="/" element={<Lading />} />
         <Route path="/app" element={<OrphanageMap />} />
-        <Route path="/orphanage/create" element={<CreateOrphanage />} />
-        <Route path="/orphanage/:id" element={<Orphanage />} />
+        <Route path="/orphanages/create" element={<CreateOrphanage />} />
+        <Route path="/orphanages/:id" element={<Orphanage />} />
       </Routes>
     </BrowserRouter>
   );
