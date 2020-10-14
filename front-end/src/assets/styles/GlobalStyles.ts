@@ -52,6 +52,12 @@ const GlobalStyles = createGlobalStyle`
   .mapPopup .leaflet-popup-tip-container {
     display: none;
   }
+
+  button.active {
+      background: #edfff6;
+      border: 1px solid #a1e9c5;
+      color: #37c77f;
+    }
 `;
 
 export default GlobalStyles;
