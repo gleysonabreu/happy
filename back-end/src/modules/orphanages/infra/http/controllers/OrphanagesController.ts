@@ -45,7 +45,7 @@ class OrphanagesController {
       latitude,
       longitude,
       name,
-      open_on_weekends,
+      open_on_weekends: open_on_weekends === 'true',
       opening_hours,
       images,
     });
