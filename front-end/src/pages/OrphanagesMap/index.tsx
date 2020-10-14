@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiPlus, FiArrowRight } from 'react-icons/fi';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -15,8 +15,25 @@ import {
 
 import mapMarkerImg from '../../assets/images/map-marker.svg';
 import mapIcon from '../../utils/mapIcon';
+import api from '../../services/api';
+
+interface IOrphanage {
+  id: number;
+  latitude: number;
+  longitude: number;
+  name: string;
+}
 
 function OrphanageMap() {
+  const [orphanages, setOphanages] = useState<IOrphanage[]>([]);
+
+  useEffect(() => {
+    api.get('/orphanages').then(res => {
+      const ophanagesRes = res.data;
+      setOphanages(ophanagesRes);
+    });
+  }, []);
+
   return (
     <PageMap>
       <SideMap>
@@ -47,19 +64,25 @@ function OrphanageMap() {
           url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
         />
 
-        <Marker icon={mapIcon} position={[-3.6899674, -38.6005319]}>
-          <Popup
-            closeButton={false}
-            minWidth={250}
-            maxWidth={250}
-            className="mapPopup"
+        {orphanages.map(orphanage => (
+          <Marker
+            key={orphanage.id}
+            icon={mapIcon}
+            position={[orphanage.latitude, orphanage.longitude]}
           >
-            Lar das meninas
-            <Link to="/orphanages/1">
-              <FiArrowRight size={20} color="#fff" />
-            </Link>
-          </Popup>
-        </Marker>
+            <Popup
+              closeButton={false}
+              minWidth={250}
+              maxWidth={250}
+              className="mapPopup"
+            >
+              {orphanage.name}
+              <Link to={`/orphanages/${orphanage.id}`}>
+                <FiArrowRight size={20} color="#fff" />
+              </Link>
+            </Popup>
+          </Marker>
+        ))}
       </Map>
 
       <Link to="/orphanages/create">

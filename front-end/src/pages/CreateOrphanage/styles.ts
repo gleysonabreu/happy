@@ -69,6 +69,22 @@ export const InputBlock = styled.div`
     padding: 16px;
     line-height: 28px;
   }
+
+  .images-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 16px;
+
+    img {
+      width: 100%;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+  }
+  input[type='file'] {
+    display: none;
+  }
 `;
 
 export const Label = styled.label`
@@ -85,13 +101,16 @@ export const Span = styled.span`
   line-height: 24px;
 `;
 
-export const NewImage = styled.button`
-  width: 100%;
-  height: 64px;
+export const NewImage = styled.label`
+  height: 96px;
   background: #f5f8fa;
   border: 1px dashed #96d2f0;
   border-radius: 20px;
   cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ButtonSelect = styled.div`
