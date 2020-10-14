@@ -17,6 +17,10 @@
         "prettier"
     ],
     "rules": {
+      "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "^_" }],
+      "camelcase": "off",
+      "no-empty-function": "off",
+      "import/prefer-default-export": "off",
       "no-useless-constructor": "off",
       "prettier/prettier": "error",
       "import/no-unresolved": "off",

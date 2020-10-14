@@ -11,6 +11,14 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true,
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "strictPropertyInitialization": false,
+
+      "baseUrl": ".",
+      "paths": {
+        "@modules/*": ["./src/modules/*"],
+        "@shared/*": ["./src/shared/*"],
+        "@config/*": ["./src/config/*"]
+      }
    }
 }
