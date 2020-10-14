@@ -58,6 +58,9 @@ const GlobalStyles = createGlobalStyle`
       border: 1px solid #a1e9c5;
       color: #37c77f;
     }
+  button.activeOrpha{
+    opacity: 1;
+  }
 `;
 
 export default GlobalStyles;
