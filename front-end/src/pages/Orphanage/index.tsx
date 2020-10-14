@@ -1,11 +1,9 @@
-import { render } from '@testing-library/react';
 import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { FiClock, FiInfo, FiArrowLeft } from 'react-icons/fi';
+import { FiClock, FiInfo } from 'react-icons/fi';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 import {
-  Footer,
   FooterMap,
   Main,
   MapContainer,
@@ -14,9 +12,9 @@ import {
   OrphanageDetailsContent,
   OrphanageImages,
   PageOrphanage,
-  Side,
 } from './styles';
 import mapMarkerImg from '../../assets/images/map-marker.svg';
+import Sidebar from '../../components/Sidebar';
 
 const happyMapIcon = L.icon({
   iconUrl: mapMarkerImg,
@@ -29,15 +27,7 @@ const happyMapIcon = L.icon({
 function Orphanage() {
   return (
     <PageOrphanage>
-      <Side>
-        <img src={mapMarkerImg} alt="Happy" />
-        <Footer>
-          <button type="button">
-            <FiArrowLeft size={24} color="#FFF" />
-          </button>
-        </Footer>
-      </Side>
-
+      <Sidebar />
       <Main>
         <OrphanageDetails>
           <img

@@ -32,7 +32,7 @@ function Lading() {
           <Span>Ceará</Span>
         </Location>
 
-        <Link to="/orphanagemap">
+        <Link to="/app">
           <FiArrowRight size={26} color="rgba(0, 0, 0, 0.6)" />
         </Link>
       </ContentWrapper>

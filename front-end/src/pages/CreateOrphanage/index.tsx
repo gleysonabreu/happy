@@ -3,14 +3,11 @@ import React from 'react';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import L from 'leaflet';
 
-import { FiArrowLeft, FiPlus } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 
-import { useNavigate } from 'react-router-dom';
 import mapMarkerImg from '../../assets/images/map-marker.svg';
 import {
   PageCreateOrphanage,
-  Side,
-  Footer,
   Main,
   Form,
   Fieldset,
@@ -21,6 +18,7 @@ import {
   ButtonSelect,
   ConfirmButton,
 } from './styles';
+import Sidebar from '../../components/Sidebar';
 
 const happyMapIcon = L.icon({
   iconUrl: mapMarkerImg,
@@ -31,17 +29,9 @@ const happyMapIcon = L.icon({
 });
 
 function CreateOrphanage() {
-  const navigate = useNavigate();
   return (
     <PageCreateOrphanage>
-      <Side>
-        <img src={mapMarkerImg} alt="Happy" />
-        <Footer>
-          <button type="button" onClick={() => navigate(-1)}>
-            <FiArrowLeft size={24} color="#fff" />
-          </button>
-        </Footer>
-      </Side>
+      <Sidebar />
       <Main>
         <Form>
           <Fieldset>
