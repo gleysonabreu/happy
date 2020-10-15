@@ -15,7 +15,9 @@ class Image {
   @Column()
   path: string;
 
-  @ManyToOne(() => Orphanage, orphanage => orphanage.images)
+  @ManyToOne(() => Orphanage, orphanage => orphanage.images, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'orphanage_id' })
   orphanage: Orphanage;
 }

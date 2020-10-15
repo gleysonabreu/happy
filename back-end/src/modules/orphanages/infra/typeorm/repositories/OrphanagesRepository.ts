@@ -10,6 +10,10 @@ class OrphanagesRepository implements IOrphanagesRepository {
     this.ormRepository = getRepository(Orphanage);
   }
 
+  delete = async (orphanage: Orphanage): Promise<void> => {
+    await this.ormRepository.remove(orphanage);
+  };
+
   findById = async (id: string): Promise<Orphanage | undefined> => {
     const orphanage = await this.ormRepository.findOne(id, {
       relations: ['images'],

@@ -1,3 +1,4 @@
+import DeleteOrphanageService from '@modules/orphanages/services/DeleteOrphanageService';
 import { Request, Response, Express } from 'express';
 import { container } from 'tsyringe';
 import FindAllService from '../../../services/FindAllService';
@@ -6,6 +7,15 @@ import ICreateOrphanagesService from '../../../services/ICreateOrphanagesService
 import orphanageView from '../views/orphanages_view';
 
 class OrphanagesController {
+  delete = async (request: Request, response: Response): Promise<Response> => {
+    const { id } = request.params;
+
+    const deleteOrpanageService = container.resolve(DeleteOrphanageService);
+    await deleteOrpanageService.execute(id);
+
+    return response.status(204).send();
+  };
+
   show = async (request: Request, response: Response): Promise<Response> => {
     const { id } = request.params;
 
