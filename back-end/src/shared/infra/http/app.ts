@@ -8,6 +8,8 @@ import cors from 'cors';
 import ErrorHandle from '@shared/errors/ErrorHandle';
 import routes from './routes';
 
+require('dotenv/config');
+
 class App {
   public app: express.Application;
 
