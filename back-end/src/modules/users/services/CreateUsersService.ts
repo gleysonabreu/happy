@@ -1,10 +1,11 @@
-import { inject, injectable } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 import * as Yup from 'yup';
 import bcrypt from 'bcrypt';
 import AppError from '@shared/errors/AppError';
 import ICreateUsersDTO from '../dtos/ICreateUsersDTO';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
+import LoginService from './LoginService';
 
 @injectable()
 class ICreateUsersService {
@@ -23,7 +24,7 @@ class ICreateUsersService {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().required(),
-      password: Yup.string().required(),
+      password: Yup.string().required().min(6),
     });
     await schema.validate(user, { abortEarly: false });
 
@@ -39,7 +40,10 @@ class ICreateUsersService {
     user.password = hashPassword;
     const createUser = await this.usersRepository.create(user);
 
-    return createUser;
+    const loginService = container.resolve(LoginService);
+    const authentication = await loginService.execute({ email, password });
+
+    return { createUser, authentication };
   };
 }
 

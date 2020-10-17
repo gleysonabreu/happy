@@ -18,9 +18,16 @@ class UsersController {
     const { name, email, password } = request.body;
 
     const createUserService = container.resolve(CreateUsersService);
-    const user = await createUserService.execute({ name, email, password });
+    const registerUser = await createUserService.execute({
+      name,
+      email,
+      password,
+    });
 
-    return response.json(usersView.render(user));
+    const user = usersView.render(registerUser.createUser);
+    const token = registerUser.authentication;
+
+    return response.json({ user, token });
   };
 }
 

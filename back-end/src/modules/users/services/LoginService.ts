@@ -18,7 +18,7 @@ class LoginService {
   execute = async (user: ISessionDTO) => {
     const validation = Yup.object().shape({
       email: Yup.string().required().min(1),
-      password: Yup.string().min(6),
+      password: Yup.string().required().min(6),
     });
 
     await validation.validate(user, { abortEarly: false });
