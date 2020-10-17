@@ -1,6 +1,5 @@
 import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as Yup from 'yup';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
@@ -27,7 +26,7 @@ class LoginService {
 
     if (!userSession) throw new AppError('User not found');
 
-    if (!(await bcrypt.compare(user.password, userSession.password)))
+    if (!(await userSession.checkPasswordIsValid(user.password)))
       throw new AppError('Email or password invalid.');
 
     try {
