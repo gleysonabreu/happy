@@ -2,6 +2,7 @@ import AppError from '@shared/errors/AppError';
 import { injectable, inject } from 'tsyringe';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import * as Yup from 'yup';
 import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
 import ISessionDTO from '../dtos/ISessionDTO';
@@ -15,6 +16,13 @@ class LoginService {
   ) {}
 
   execute = async (user: ISessionDTO) => {
+    const validation = Yup.object().shape({
+      email: Yup.string().required().min(1),
+      password: Yup.string().min(6),
+    });
+
+    await validation.validate(user, { abortEarly: false });
+
     const userSession = await this.usersRepository.show(user.email);
 
     if (!userSession) throw new AppError('User not found');
