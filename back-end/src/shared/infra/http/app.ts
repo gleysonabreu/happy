@@ -6,10 +6,12 @@ import cors from 'cors';
 import connection from '@shared/infra/typeorm';
 
 import ErrorHandle from '@shared/errors/ErrorHandle';
+import dotenv from 'dotenv';
 import routes from './routes';
 
-require('dotenv/config');
-
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
 class App {
   public app: express.Application;
 
@@ -18,6 +20,7 @@ class App {
     this.app = express();
     this.middlewares();
     this.routes();
+    console.log(process.env.PGPASS);
   }
 
   private middlewares = async () => {
