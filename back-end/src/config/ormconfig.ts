@@ -46,4 +46,4 @@ const ormConfig: PostgresConnectionOptions = {
   },
 };
 
-export default ormConfig;
+export = ormConfig;
