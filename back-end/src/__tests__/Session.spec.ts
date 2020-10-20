@@ -1,24 +1,26 @@
 import request from 'supertest';
 import connection from '@shared/infra/typeorm';
-import Users from '@modules/users/infra/typeorm/entities/Users';
-import { Connection } from 'typeorm';
+import { container } from 'tsyringe';
+import CreateUsersService from '@modules/users/services/CreateUsersService';
 import app from '../shared/infra/http/app';
+import truncate from './config/truncate';
+import { userFactory } from './config/factories';
 
 describe('Authentication', () => {
-  let connectionApp: Connection;
   beforeAll(async () => {
-    connectionApp = await connection();
+    await connection();
   });
 
-  afterAll(async done => {
-    await connectionApp.close();
-    done();
+  beforeEach(async () => {
+    await truncate();
   });
 
   it('should authenticate with valid credentials', async () => {
-    const user = new Users();
-    user.email = 'userteste@hotmail.com';
-    user.password = '123456';
+    const user = await userFactory({});
+
+    const createUserService = container.resolve(CreateUsersService);
+    await createUserService.execute(user);
+
     const response = await request(app).get('/api/v1/authenticate').send({
       email: user.email,
       password: user.password,
@@ -28,22 +30,24 @@ describe('Authentication', () => {
   });
 
   it('should not authenticate with invalid credentials', async () => {
-    const user = new Users();
-    user.email = 'userteste@hotmail.com';
-    user.password = '1234567';
+    const user = await userFactory({});
+
+    const createUserService = container.resolve(CreateUsersService);
+    await createUserService.execute(user);
 
     const response = await request(app).get('/api/v1/authenticate').send({
       email: user.email,
-      password: user.password,
+      password: '15152020',
     });
 
     expect(response.status).toBe(400);
   });
 
   it('should return jwt token when authenticated', async () => {
-    const user = new Users();
-    user.email = 'userteste@hotmail.com';
-    user.password = '123456';
+    const user = await userFactory({});
+
+    const createUserService = container.resolve(CreateUsersService);
+    await createUserService.execute(user);
 
     const response = await request(app).get('/api/v1/authenticate').send({
       email: user.email,
