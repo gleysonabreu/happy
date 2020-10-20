@@ -20,7 +20,6 @@ class App {
     this.app = express();
     this.middlewares();
     this.routes();
-    console.log(process.env.PGPASS);
   }
 
   private middlewares = async () => {
