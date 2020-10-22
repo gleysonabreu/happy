@@ -1,14 +1,14 @@
 import faker from 'faker/locale/pt_BR';
 import Users from '@modules/users/infra/typeorm/entities/Users';
 
-interface IHideAttributes {
+interface IUserFactory {
   hide?: 'email' | 'password' | 'name' | undefined;
   email?: string;
   password?: string;
   name?: string;
 }
 
-export const userFactory = async (attr?: IHideAttributes) => {
+export const userFactory = async (attr?: IUserFactory) => {
   const user = new Users();
 
   if (attr.hide !== 'password')
@@ -19,4 +19,18 @@ export const userFactory = async (attr?: IHideAttributes) => {
     user.name = attr.name ? attr.name : faker.name.findName();
 
   return user;
+};
+
+export const useOrphanage = async () => {
+  const orphanage = {
+    name: faker.name.findName(),
+    latitude: faker.address.latitude(),
+    longitude: faker.address.longitude(),
+    about: 'Hiii',
+    instructions: 'Não',
+    open_on_weekends: false,
+    opening_hours: '6 AM',
+  };
+
+  return orphanage;
 };
