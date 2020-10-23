@@ -13,4 +13,14 @@ module.exports = {
     '@config/(.*)': '<rootDir>/src/config/$1',
   },
   verbose: true,
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/config/**',
+    'src/modules/**',
+    'src/shared/**',
+    '!src/shared/infra/typeorm/migrations/**',
+    '!src/modules/**/dtos/**',
+    '!src/modules/*/repositories/**',
+  ],
+  coverageDirectory: 'src/__tests__/coverage',
 };
