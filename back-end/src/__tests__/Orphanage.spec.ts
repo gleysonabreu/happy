@@ -6,6 +6,7 @@ import ICreateOrphanagesService from '@modules/orphanages/services/ICreateOrphan
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { useOrphanage } from './config/factories';
+import truncateImages from './config/truncate_images';
 
 const image = path.join(__dirname, '..', '..', 'uploads', 'baixados.png');
 
@@ -16,6 +17,10 @@ describe('Orphanage', () => {
 
   beforeEach(async () => {
     await truncate();
+  });
+
+  afterAll(async () => {
+    await truncateImages();
   });
 
   it('should create a orphanage with valid information', async () => {
