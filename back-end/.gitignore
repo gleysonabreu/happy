@@ -6,3 +6,4 @@ tmp/
 temp/
 uploads/
 .env
+src/__tests__/coverage

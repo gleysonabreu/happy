@@ -1,7 +1,8 @@
 {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     "extends": [
         "airbnb-base",
@@ -39,5 +40,13 @@
           "extensions": [".ts", ".tsx"]
         }
       }
-    }
+    },
+    "overrides": [
+      {
+        "files": ["**/__tests__/**/*.spec.ts?(x)"],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
 }

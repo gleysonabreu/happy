@@ -43,6 +43,8 @@ class ForgotPassword {
         http://localhost:3333/api/v1/forgotpassword/validation?forgot_password_token=${token}`,
         subject: 'Forgot password from Happy',
       });
+
+      return token;
     } catch (error) {
       throw new AppError('Email not sent, try again.');
     }

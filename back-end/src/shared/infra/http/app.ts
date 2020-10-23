@@ -1,25 +1,28 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-import '../typeorm';
 import express from 'express';
 import path from 'path';
 import cors from 'cors';
+import connection from '@shared/infra/typeorm';
 
 import ErrorHandle from '@shared/errors/ErrorHandle';
+import dotenv from 'dotenv';
 import routes from './routes';
 
-require('dotenv/config');
-
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
 class App {
   public app: express.Application;
 
   constructor() {
+    connection();
     this.app = express();
     this.middlewares();
     this.routes();
   }
 
-  private middlewares = () => {
+  private middlewares = async () => {
     this.app.use(express.json());
     this.app.use(cors());
   };
