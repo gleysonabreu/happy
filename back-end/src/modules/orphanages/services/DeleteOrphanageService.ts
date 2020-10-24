@@ -18,15 +18,14 @@ class DeleteOrphanageService {
 
     if (!checkOrphanage) throw new AppError('Orphanage not found.');
 
-    await this.orphanageRepository.delete(checkOrphanage);
-
     if (checkOrphanage.images) {
-      checkOrphanage.images.forEach(async image => {
+      checkOrphanage.images.forEach(image => {
         const pathFile = path.resolve(folder, image.path);
-
+        if (!fs.existsSync(pathFile)) throw new AppError('Image not found');
         fs.unlinkSync(pathFile);
       });
     }
+    await this.orphanageRepository.delete(checkOrphanage);
   };
 }
 

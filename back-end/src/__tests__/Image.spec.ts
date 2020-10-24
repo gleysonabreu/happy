@@ -1,16 +1,20 @@
 import request from 'supertest';
-import connection from '@shared/infra/typeorm';
+import createConnection from '@shared/infra/typeorm';
 import path from 'path';
+import { Connection, getConnection } from 'typeorm';
+import Image from '@modules/orphanages/infra/typeorm/entities/Image';
+import imageViews from '@modules/orphanages/infra/http/views/images_view';
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { useOrphanage } from './config/factories';
 import truncateImages from './config/truncate_images';
 
 const image = path.join(__dirname, '..', '..', 'uploads', 'baixados.png');
+let connection: Connection;
 
 describe('Images Orphanage', () => {
   beforeAll(async () => {
-    await connection();
+    connection = await createConnection();
   });
 
   beforeEach(async () => {
@@ -19,6 +23,9 @@ describe('Images Orphanage', () => {
 
   afterAll(async () => {
     await truncateImages();
+    const myConnection = getConnection();
+    await connection.close();
+    await myConnection.close();
   });
 
   it('should delete image with valid id', async () => {
@@ -49,5 +56,16 @@ describe('Images Orphanage', () => {
     );
 
     expect(response.status).toBe(400);
+  });
+
+  it('should return only the information determined by the image view(render one)', async () => {
+    const newImage = new Image();
+    newImage.id = 10;
+    newImage.path = '141411.png';
+
+    const imageView = imageViews.render(newImage);
+
+    expect(imageView).toHaveProperty('id');
+    expect(imageView).toHaveProperty('path');
   });
 });

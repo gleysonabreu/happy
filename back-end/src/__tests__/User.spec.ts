@@ -1,18 +1,30 @@
 import request from 'supertest';
-import connection from '@shared/infra/typeorm';
+import createConnection from '@shared/infra/typeorm';
 import { container } from 'tsyringe';
 import CreateUsersService from '@modules/users/services/CreateUsersService';
+import { Connection, getConnection } from 'typeorm';
+import usersView from '@modules/users/infra/http/views/users.view';
+import Users from '@modules/users/infra/typeorm/entities/Users';
+import { array } from 'yup';
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { userFactory } from './config/factories';
 
+let connection: Connection;
+
 describe('User', () => {
   beforeAll(async () => {
-    await connection();
+    connection = await createConnection();
   });
 
   beforeEach(async () => {
     await truncate();
+  });
+
+  afterAll(async () => {
+    const myConnection = getConnection();
+    await connection.close();
+    await myConnection.close();
   });
 
   it('should create a user with valid information', async () => {
@@ -83,5 +95,21 @@ describe('User', () => {
     const response = await request(app).get(`/api/v1/users/${id}`);
 
     expect(response.status).toBe(400);
+  });
+
+  it('should return only the information determined by the users view', async () => {
+    const arrayUser: Users[] = [];
+    const user1 = new Users();
+    user1.id = 1;
+    user1.email = 'fhfhduihf@ojihf.com';
+    user1.name = 'jfhsfg';
+    user1.password = 'dadad';
+
+    arrayUser.push(user1);
+    arrayUser.push(user1);
+
+    const userView = usersView.renderMany(arrayUser);
+
+    expect(typeof userView).toBe('object');
   });
 });

@@ -1,18 +1,20 @@
 import request from 'supertest';
-import connection from '@shared/infra/typeorm';
+import createConnection from '@shared/infra/typeorm';
 import path from 'path';
 import { container } from 'tsyringe';
 import ICreateOrphanagesService from '@modules/orphanages/services/ICreateOrphanagesService';
+import { Connection, getConnection } from 'typeorm';
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { useOrphanage } from './config/factories';
 import truncateImages from './config/truncate_images';
 
 const image = path.join(__dirname, '..', '..', 'uploads', 'baixados.png');
+let connection: Connection;
 
 describe('Orphanage', () => {
   beforeAll(async () => {
-    await connection();
+    connection = await createConnection();
   });
 
   beforeEach(async () => {
@@ -21,6 +23,9 @@ describe('Orphanage', () => {
 
   afterAll(async () => {
     await truncateImages();
+    const myConnection = getConnection();
+    await connection.close();
+    await myConnection.close();
   });
 
   it('should create a orphanage with valid information', async () => {
@@ -63,7 +68,7 @@ describe('Orphanage', () => {
     expect(response.body).toHaveProperty('id');
   });
 
-  it('should create a orphanage with invalid information', async () => {
+  it('should not create an orphanage with invalid information', async () => {
     const orphanage = await useOrphanage();
     const response = await request(app)
       .post('/api/v1/orphanages')
@@ -181,5 +186,66 @@ describe('Orphanage', () => {
     const response = await request(app).get(`/api/v1/orphanages/${id}`);
 
     expect(response.status).toBe(400);
+  });
+
+  it('should not delete an orphanage with invalid path image', async () => {
+    const orphanageFactory = await useOrphanage();
+    const createOrphanageService = container.resolve(ICreateOrphanagesService);
+    const orphanage = await createOrphanageService.execute({
+      about: orphanageFactory.about,
+      instructions: orphanageFactory.instructions,
+      latitude: Number(orphanageFactory.latitude),
+      longitude: Number(orphanageFactory.longitude),
+      name: orphanageFactory.name,
+      open_on_weekends: orphanageFactory.open_on_weekends,
+      opening_hours: orphanageFactory.opening_hours,
+      images: [
+        {
+          path: '1414541.jpg',
+        },
+      ],
+    });
+
+    const response = await request(app).delete(
+      `/api/v1/orphanages/${orphanage.id}`,
+    );
+
+    expect(response.status).toBe(400);
+  });
+
+  it('should delete an orphanage with valid path image', async () => {
+    const orphanageFactory = await useOrphanage();
+    const imageReturn = await request(app)
+      .post('/api/v1/orphanages')
+      .field('name', orphanageFactory.name)
+      .field('latitude', orphanageFactory.latitude)
+      .field('longitude', orphanageFactory.longitude)
+      .field('about', orphanageFactory.about)
+      .field('instructions', orphanageFactory.instructions)
+      .field('opening_hours', orphanageFactory.opening_hours)
+      .field('open_on_weekends', orphanageFactory.open_on_weekends)
+      .attach('images', image);
+
+    const createOrphanageService = container.resolve(ICreateOrphanagesService);
+    const orphanage = await createOrphanageService.execute({
+      about: orphanageFactory.about,
+      instructions: orphanageFactory.instructions,
+      latitude: Number(orphanageFactory.latitude),
+      longitude: Number(orphanageFactory.longitude),
+      name: orphanageFactory.name,
+      open_on_weekends: orphanageFactory.open_on_weekends,
+      opening_hours: orphanageFactory.opening_hours,
+      images: [
+        {
+          path: imageReturn.body.images[0].path,
+        },
+      ],
+    });
+
+    const response = await request(app).delete(
+      `/api/v1/orphanages/${orphanage.id}`,
+    );
+
+    expect(response.status).toBe(204);
   });
 });

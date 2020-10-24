@@ -30,9 +30,11 @@ class DeleteImageService {
 
     if (!image) throw new AppError('Image not found.');
 
-    await this.ImagesRepository.delete(id);
     const pathFile = path.resolve(folder, image.path);
+    if (!fs.existsSync(pathFile)) throw new AppError('Image path not found.');
+
     fs.unlinkSync(pathFile);
+    await this.ImagesRepository.delete(id);
   };
 }
 
