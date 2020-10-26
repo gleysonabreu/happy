@@ -7,7 +7,7 @@ class ImageController {
     const { id } = request.params;
 
     const deleteImageService = container.resolve(DeleteImageService);
-    await deleteImageService.execute(Number(id));
+    await deleteImageService.execute(Number(id), request.userId);
 
     return response.status(204).send();
   };

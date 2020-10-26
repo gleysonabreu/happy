@@ -14,13 +14,14 @@ class DeleteImageService {
     private ImagesRepository: IImagesRepository,
   ) {}
 
-  execute = async (id: number) => {
+  execute = async (id: number, user_id: number) => {
     const validation = Yup.object().shape({
       id: Yup.number().required(),
+      user_id: Yup.number().required(),
     });
 
     await validation.validate(
-      { id },
+      { id, user_id },
       {
         abortEarly: false,
       },
@@ -29,6 +30,9 @@ class DeleteImageService {
     const image = await this.ImagesRepository.findImageById(id);
 
     if (!image) throw new AppError('Image not found.');
+
+    if (image.orphanage.user.id !== user_id)
+      throw new AppError('You cannot delete this image.');
 
     const pathFile = path.resolve(folder, image.path);
     if (!fs.existsSync(pathFile)) throw new AppError('Image path not found.');
