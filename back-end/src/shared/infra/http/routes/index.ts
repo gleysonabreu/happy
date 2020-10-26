@@ -8,7 +8,7 @@ import middlewareAuth from '../middlewares/auth';
 
 const routes = Router();
 
-routes.use('/orphanages', [middlewareAuth], orphanages);
+routes.use('/orphanages', orphanages);
 routes.use('/orphanages/image', [middlewareAuth], imagesRoute);
 routes.use('/users', usersRoute);
 routes.use('/authenticate', sessionRoutes);
