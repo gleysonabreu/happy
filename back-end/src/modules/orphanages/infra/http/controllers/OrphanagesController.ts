@@ -41,6 +41,7 @@ class OrphanagesController {
       instructions,
       opening_hours,
       open_on_weekends,
+      approved,
     } = request.body;
 
     const requestImages = request.files as Express.Multer.File[];
@@ -58,6 +59,10 @@ class OrphanagesController {
       open_on_weekends: open_on_weekends === 'true',
       opening_hours,
       images,
+      user: {
+        id: request.userId,
+      },
+      approved: approved === 'true',
     });
 
     return response.json(orphanage);

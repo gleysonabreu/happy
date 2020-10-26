@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   JoinColumn,
-  ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 import Users from '@modules/users/infra/typeorm/entities/Users';
 import Image from './Image';
@@ -35,6 +35,9 @@ class Orphanage {
   @Column()
   open_on_weekends: boolean;
 
+  @Column()
+  approved: boolean;
+
   @OneToMany(() => Image, image => image.orphanage, {
     cascade: ['insert', 'update', 'remove'],
     onDelete: 'CASCADE',
@@ -42,7 +45,7 @@ class Orphanage {
   @JoinColumn({ name: 'orphanage_id' })
   images: Image[];
 
-  @ManyToMany(() => Users, user => user.orphanages, {
+  @ManyToOne(() => Users, user => user.orphanages, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })

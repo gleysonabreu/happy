@@ -23,7 +23,7 @@ class Users {
   password: string;
 
   @OneToMany(() => Orphanage, orphanage => orphanage.user, {
-    cascade: ['insert', 'update', 'remove'],
+    cascade: ['insert', 'update'],
   })
   @JoinColumn({ name: 'user_id' })
   orphanages: Orphanage[];
