@@ -43,6 +43,25 @@ export class createOrphanages1602630349663 implements MigrationInterface {
             type: 'boolean',
             default: false,
           },
+          {
+            name: 'approved',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'user_id',
+            type: 'integer',
+          },
+        ],
+        foreignKeys: [
+          {
+            name: 'orphanage_user',
+            columnNames: ['user_id'],
+            referencedTableName: 'users',
+            referencedColumnNames: ['id'],
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+          },
         ],
       }),
     );
