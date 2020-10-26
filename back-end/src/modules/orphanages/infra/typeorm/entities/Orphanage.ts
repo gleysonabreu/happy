@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   JoinColumn,
+  ManyToMany,
 } from 'typeorm';
+import Users from '@modules/users/infra/typeorm/entities/Users';
 import Image from './Image';
 
 @Entity('orphanages')
@@ -39,6 +41,12 @@ class Orphanage {
   })
   @JoinColumn({ name: 'orphanage_id' })
   images: Image[];
+
+  @ManyToMany(() => Users, user => user.orphanages, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
 }
 
 export default Orphanage;

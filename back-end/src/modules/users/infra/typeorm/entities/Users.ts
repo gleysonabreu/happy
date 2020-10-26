@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import bcrypt from 'bcrypt';
+import Orphanage from '@modules/orphanages/infra/typeorm/entities/Orphanage';
 
 @Entity('users')
 class Users {
@@ -14,6 +21,12 @@ class Users {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Orphanage, orphanage => orphanage.user, {
+    cascade: ['insert', 'update', 'remove'],
+  })
+  @JoinColumn({ name: 'user_id' })
+  orphanages: Orphanage[];
 
   encryptPassword = async () => {
     this.password = await bcrypt.hash(
