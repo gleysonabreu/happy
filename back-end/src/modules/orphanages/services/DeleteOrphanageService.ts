@@ -13,10 +13,13 @@ class DeleteOrphanageService {
     private orphanageRepository: IOrphanagesRepository,
   ) {}
 
-  execute = async (id: string) => {
+  execute = async (id: string, user_id: number) => {
     const checkOrphanage = await this.orphanageRepository.findById(id);
 
     if (!checkOrphanage) throw new AppError('Orphanage not found.');
+
+    if (checkOrphanage.user.id !== user_id)
+      throw new AppError('You cannot delete this orphanage');
 
     if (checkOrphanage.images) {
       checkOrphanage.images.forEach(image => {

@@ -11,7 +11,7 @@ class OrphanagesController {
     const { id } = request.params;
 
     const deleteOrpanageService = container.resolve(DeleteOrphanageService);
-    await deleteOrpanageService.execute(id);
+    await deleteOrpanageService.execute(id, request.userId);
 
     return response.status(204).send();
   };
