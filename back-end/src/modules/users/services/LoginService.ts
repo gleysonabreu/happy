@@ -30,13 +30,7 @@ class LoginService {
       throw new AppError('Email or password invalid.');
 
     try {
-      const token = jwt.sign(
-        viewUser.render(userSession),
-        process.env.SECRET_TOKEN,
-        {
-          expiresIn: 86400,
-        },
-      );
+      const token = await userSession.createSession();
 
       return token;
     } catch (error) {

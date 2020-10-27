@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import bcrypt from 'bcrypt';
 import Orphanage from '@modules/orphanages/infra/typeorm/entities/Orphanage';
+import jwt from 'jsonwebtoken';
 
 @Entity('users')
 class Users {
@@ -39,6 +40,22 @@ class Users {
     const isValid = await bcrypt.compare(password, this.password);
 
     return isValid;
+  };
+
+  createSession = async (): Promise<string> => {
+    const token = jwt.sign(
+      {
+        email: this.email,
+        id: this.id,
+        name: this.name,
+      },
+      process.env.SECRET_TOKEN,
+      {
+        expiresIn: 86400,
+      },
+    );
+
+    return token;
   };
 }
 
