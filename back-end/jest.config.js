@@ -22,6 +22,7 @@ module.exports = {
     '!src/modules/**/dtos/**',
     '!src/modules/*/repositories/**',
     '!src/shared/infra/http/server.ts',
+    '!src/shared/@types/**',
   ],
   coverageDirectory: 'src/__tests__/coverage',
 };
