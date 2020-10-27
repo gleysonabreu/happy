@@ -4,9 +4,12 @@ import path from 'path';
 import { Connection, getConnection } from 'typeorm';
 import Image from '@modules/orphanages/infra/typeorm/entities/Image';
 import imageViews from '@modules/orphanages/infra/http/views/images_view';
+import { container } from 'tsyringe';
+import CreateUsersService from '@modules/users/services/CreateUsersService';
+
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
-import { useOrphanage } from './config/factories';
+import { useOrphanage, userFactory } from './config/factories';
 import truncateImages from './config/truncate_images';
 
 const image = path.join(__dirname, '..', '..', 'uploads', 'baixados.png');
@@ -29,6 +32,10 @@ describe('Images Orphanage', () => {
   });
 
   it('should delete image with valid id', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+
     const orphanageFactory = await useOrphanage();
     const resOrphanage = await request(app)
       .post('/api/v1/orphanages')
@@ -39,21 +46,28 @@ describe('Images Orphanage', () => {
       .field('instructions', orphanageFactory.instructions)
       .field('opening_hours', orphanageFactory.opening_hours)
       .field('open_on_weekends', orphanageFactory.open_on_weekends)
-      .attach('images', image);
-    const { images } = resOrphanage.body;
+      .field('approved', orphanageFactory.approved)
+      .attach('images', image)
+      .set('Authorization', `Bearer ${user.authentication}`);
 
-    const response = await request(app).delete(
-      `/api/v1/orphanages/image/${images[0].id}`,
-    );
+    const photos: Image[] = resOrphanage.body.images;
+
+    const response = await request(app)
+      .delete(`/api/v1/orphanages/image/${photos[0].id}`)
+      .set('Authorization', `Bearer ${user.authentication}`);
 
     expect(response.status).toBe(204);
   });
 
   it('should not delete image with invalid id', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+
     const id = 5784578;
-    const response = await request(app).delete(
-      `'/api/v1/orphanages/image/${id}`,
-    );
+    const response = await request(app)
+      .delete(`'/api/v1/orphanages/image/${id}`)
+      .set('Authorization', `Bearer ${user.authentication}`);
 
     expect(response.status).toBe(400);
   });
