@@ -64,4 +64,24 @@ describe('Authentication', () => {
 
     expect(response.body).toHaveProperty('token');
   });
+
+  it('should not access a route without being authenticated', async () => {
+    const id = 5484;
+    const repsonse = await request(app).delete(`/api/v1/orphanages/${id}`);
+
+    expect(repsonse.status).toBe(401);
+  });
+
+  it('should access a route when authenticated but not delete orphanage', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+    const id = 145454;
+
+    const response = await request(app)
+      .delete(`/api/v1/orphanages/${id}`)
+      .set('Authorization', `Bearer ${user.authentication}`);
+
+    expect(response.status).toBe(400);
+  });
 });
