@@ -8,7 +8,7 @@ interface IJwt {
   email: string;
 }
 
-export default async (
+const authMid = async (
   request: Request,
   _response: Response,
   next: NextFunction,
@@ -30,3 +30,5 @@ export default async (
     throw new AppError('Token invalid', 401);
   }
 };
+
+export default authMid;
