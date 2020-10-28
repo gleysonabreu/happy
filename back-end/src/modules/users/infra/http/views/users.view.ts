@@ -6,10 +6,11 @@ export default {
       id: user.id,
       name: user.name,
       email: user.email,
+      orphanages: user.orphanages,
     };
   },
 
-  renderMany(users: Users[]) {
+  renderMany(users: Users[]): Users[] {
     return users.map(user => this.render(user));
   },
 };

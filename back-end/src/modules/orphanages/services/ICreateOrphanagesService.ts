@@ -25,6 +25,10 @@ class ICreateOrphanagesService {
           path: Yup.string().required(),
         }),
       ),
+      user: Yup.object().shape({
+        id: Yup.number().required().min(1),
+      }),
+      approved: Yup.boolean().required(),
     });
 
     await schema.validate(data, {

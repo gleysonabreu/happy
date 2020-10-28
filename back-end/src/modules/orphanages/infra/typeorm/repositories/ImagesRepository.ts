@@ -10,7 +10,12 @@ class ImagesRepository implements IImagesRepository {
   }
 
   findImageById = async (id: number): Promise<Image | undefined> => {
-    const image = await this.ormRepository.findOne({ id });
+    const image = await this.ormRepository.findOne(
+      { id },
+      {
+        relations: ['orphanage', 'orphanage.user'],
+      },
+    );
 
     return image;
   };

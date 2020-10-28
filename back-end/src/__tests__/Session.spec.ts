@@ -1,20 +1,28 @@
 import request from 'supertest';
-import connection from '@shared/infra/typeorm';
+import createConnection from '@shared/infra/typeorm';
 import { container } from 'tsyringe';
 import CreateUsersService from '@modules/users/services/CreateUsersService';
+import { Connection, getConnection } from 'typeorm';
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { userFactory } from './config/factories';
 
+let connection: Connection;
+
 describe('Authentication', () => {
   beforeAll(async () => {
-    await connection();
+    connection = await createConnection();
   });
 
   beforeEach(async () => {
     await truncate();
   });
 
+  afterAll(async () => {
+    const myConnection = getConnection();
+    await connection.close();
+    await myConnection.close();
+  });
   it('should authenticate with valid credentials', async () => {
     const user = await userFactory({});
 
@@ -55,5 +63,25 @@ describe('Authentication', () => {
     });
 
     expect(response.body).toHaveProperty('token');
+  });
+
+  it('should not access a route without being authenticated', async () => {
+    const id = 5484;
+    const repsonse = await request(app).delete(`/api/v1/orphanages/${id}`);
+
+    expect(repsonse.status).toBe(401);
+  });
+
+  it('should access a route when authenticated but not delete orphanage', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+    const id = 145454;
+
+    const response = await request(app)
+      .delete(`/api/v1/orphanages/${id}`)
+      .set('Authorization', `Bearer ${user.authentication}`);
+
+    expect(response.status).toBe(400);
   });
 });

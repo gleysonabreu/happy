@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 
 import uploadConfig from '@config/upload';
+import middlewareAuth from '@shared/infra/http/middlewares/auth';
 import OrphanagesController from '../controllers/OrphanagesController';
 
 const orphanagesRouter = Router();
@@ -10,7 +11,12 @@ const upload = multer(uploadConfig);
 
 orphanagesRouter.get('/', orphanagesController.index);
 orphanagesRouter.get('/:id', orphanagesController.show);
-orphanagesRouter.post('/', upload.array('images'), orphanagesController.create);
-orphanagesRouter.delete('/:id', orphanagesController.delete);
+orphanagesRouter.post(
+  '/',
+  [middlewareAuth],
+  upload.array('images'),
+  orphanagesController.create,
+);
+orphanagesRouter.delete('/:id', [middlewareAuth], orphanagesController.delete);
 
 export default orphanagesRouter;

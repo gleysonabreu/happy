@@ -13,7 +13,7 @@ class ShowUsersService {
 
   execute = async (id: number | string) => {
     const validation = Yup.object().shape({
-      id: Yup.string().strict(true),
+      id: Yup.number().strict(true),
     });
 
     await validation.validate(

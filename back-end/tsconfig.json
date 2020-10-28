@@ -14,6 +14,8 @@
       "esModuleInterop": true,
       "strictPropertyInitialization": false,
 
+      "typeRoots": ["./node_modules/@types", "./src/shared/@types"],
+
       "baseUrl": ".",
       "paths": {
         "@modules/*": ["./src/modules/*"],

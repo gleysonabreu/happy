@@ -21,6 +21,8 @@ module.exports = {
     '!src/shared/infra/typeorm/migrations/**',
     '!src/modules/**/dtos/**',
     '!src/modules/*/repositories/**',
+    '!src/shared/infra/http/server.ts',
+    '!src/shared/@types/**',
   ],
   coverageDirectory: 'src/__tests__/coverage',
 };

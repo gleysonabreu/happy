@@ -1,19 +1,28 @@
 import request from 'supertest';
-import connection from '@shared/infra/typeorm';
+import createConnection from '@shared/infra/typeorm';
 import { container } from 'tsyringe';
 import ICreateUsersService from '@modules/users/services/CreateUsersService';
 import ForgotPasswordService from '@modules/users/services/ForgotPasswordService';
+import { Connection, getConnection } from 'typeorm';
 import app from '../shared/infra/http/app';
 import truncate from './config/truncate';
 import { userFactory } from './config/factories';
 
+let connection: Connection;
+
 describe('ForgotPassword', () => {
   beforeAll(async () => {
-    await connection();
+    connection = await createConnection();
   });
 
   beforeEach(async () => {
     await truncate();
+  });
+
+  afterAll(async () => {
+    const myConnection = getConnection();
+    await connection.close();
+    await myConnection.close();
   });
 
   it('should send an email for recovery password', async () => {

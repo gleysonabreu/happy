@@ -9,4 +9,8 @@ export default interface ICreateOrphanagesDTO {
   images: {
     path: string;
   }[];
+  user: {
+    id: number;
+  };
+  approved: boolean;
 }
