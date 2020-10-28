@@ -133,7 +133,7 @@ describe('Orphanage', () => {
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
       images: [],
-      approved: false,
+      approved: orphanageFactory.approved,
       user: {
         id: user.createUser.id,
       },
@@ -174,7 +174,7 @@ describe('Orphanage', () => {
       name: orphanageFactory.name,
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
-      approved: true,
+      approved: orphanageFactory.approved,
       images: [],
       user: {
         id: user.createUser.id,
@@ -202,7 +202,7 @@ describe('Orphanage', () => {
       name: orphanageFactory.name,
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
-      approved: true,
+      approved: orphanageFactory.approved,
       images: [],
       user: {
         id: user.createUser.id,
@@ -231,7 +231,7 @@ describe('Orphanage', () => {
       name: orphanageFactory.name,
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
-      approved: true,
+      approved: orphanageFactory.approved,
       images: [],
       user: {
         id: user.createUser.id,
@@ -280,7 +280,7 @@ describe('Orphanage', () => {
           path: '1414541.jpg',
         },
       ],
-      approved: true,
+      approved: orphanageFactory.approved,
       user: {
         id: user.createUser.id,
       },
@@ -321,7 +321,7 @@ describe('Orphanage', () => {
       name: orphanageFactory.name,
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
-      approved: true,
+      approved: orphanageFactory.approved,
       images: [
         {
           path: imageReturn.body.images[0].path,
@@ -359,7 +359,7 @@ describe('Orphanage', () => {
       open_on_weekends: orphanageFactory.open_on_weekends,
       opening_hours: orphanageFactory.opening_hours,
       images: [],
-      approved: false,
+      approved: orphanageFactory.approved,
       user: {
         id: user.createUser.id,
       },

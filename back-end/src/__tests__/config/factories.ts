@@ -30,7 +30,7 @@ export const useOrphanage = async () => {
     instructions: 'Não',
     open_on_weekends: false,
     opening_hours: '6 AM',
-    approved: false,
+    approved: true,
   };
 
   return orphanage;
