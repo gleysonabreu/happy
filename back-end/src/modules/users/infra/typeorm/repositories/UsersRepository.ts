@@ -23,6 +23,7 @@ class UsersRepository implements IUsersRepository {
           email: emailUser,
         },
       ],
+      relations: ['orphanages', 'orphanages.images'],
     });
 
     return user;

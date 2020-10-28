@@ -6,10 +6,8 @@ import usersView from '../views/users.view';
 
 class UsersController {
   show = async (request: Request, response: Response): Promise<Response> => {
-    const { id } = request.params;
-
     const showUsersService = container.resolve(ShowUsersService);
-    const user = await showUsersService.execute(id);
+    const user = await showUsersService.execute(request.userId);
 
     return response.json(usersView.render(user));
   };
