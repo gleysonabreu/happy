@@ -16,6 +16,9 @@ class OrphanagesRepository implements IOrphanagesRepository {
 
   findById = async (id: string): Promise<Orphanage | undefined> => {
     const orphanage = await this.ormRepository.findOne(id, {
+      where: {
+        approved: true,
+      },
       relations: ['images', 'user'],
     });
 
@@ -24,6 +27,9 @@ class OrphanagesRepository implements IOrphanagesRepository {
 
   findAll = async (): Promise<Orphanage[] | undefined> => {
     const orphanages = await this.ormRepository.find({
+      where: {
+        approved: true,
+      },
       relations: ['images'],
     });
     return orphanages;
