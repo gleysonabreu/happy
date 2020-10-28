@@ -30,7 +30,7 @@ describe('ForgotPassword', () => {
     const createUser = container.resolve(ICreateUsersService);
     const user = await createUser.execute(userFaker);
 
-    const response = await request(app).get('/api/v1/forgotpassword').send({
+    const response = await request(app).post('/api/v1/forgotpassword').send({
       email: user.createUser.email,
     });
 
@@ -85,7 +85,7 @@ describe('ForgotPassword', () => {
       email: user.createUser.email,
     });
 
-    const response = await request(app).post('/api/v1/forgotpassword').send({
+    const response = await request(app).put('/api/v1/forgotpassword').send({
       newPassword: '12345678',
       repeatNewPassword: '1234567',
       token,
@@ -104,7 +104,7 @@ describe('ForgotPassword', () => {
       email: user.createUser.email,
     });
 
-    const response = await request(app).post('/api/v1/forgotpassword').send({
+    const response = await request(app).put('/api/v1/forgotpassword').send({
       newPassword: '1234567',
       repeatNewPassword: '1234567',
       token,

@@ -4,11 +4,11 @@ import ForgorPasswordController from '../controllers/ForgotPasswordController';
 const forgorPasswordRoutes = Router();
 const forgorPasswordController = new ForgorPasswordController();
 
-forgorPasswordRoutes.get('/', forgorPasswordController.forgotPassword);
+forgorPasswordRoutes.post('/', forgorPasswordController.forgotPassword);
 forgorPasswordRoutes.get(
   '/validation',
   forgorPasswordController.forgotValidateToken,
 );
-forgorPasswordRoutes.post('/', forgorPasswordController.changePassword);
+forgorPasswordRoutes.put('/', forgorPasswordController.changePassword);
 
 export default forgorPasswordRoutes;

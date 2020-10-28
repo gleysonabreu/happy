@@ -29,7 +29,7 @@ describe('Authentication', () => {
     const createUserService = container.resolve(CreateUsersService);
     await createUserService.execute(user);
 
-    const response = await request(app).get('/api/v1/authenticate').send({
+    const response = await request(app).post('/api/v1/authenticate').send({
       email: user.email,
       password: user.password,
     });
@@ -43,7 +43,7 @@ describe('Authentication', () => {
     const createUserService = container.resolve(CreateUsersService);
     await createUserService.execute(user);
 
-    const response = await request(app).get('/api/v1/authenticate').send({
+    const response = await request(app).post('/api/v1/authenticate').send({
       email: user.email,
       password: '15152020',
     });
@@ -57,7 +57,7 @@ describe('Authentication', () => {
     const createUserService = container.resolve(CreateUsersService);
     await createUserService.execute(user);
 
-    const response = await request(app).get('/api/v1/authenticate').send({
+    const response = await request(app).post('/api/v1/authenticate').send({
       email: user.email,
       password: user.password,
     });
