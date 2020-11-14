@@ -9,14 +9,14 @@ interface IMail {
 
 export const sendMail = async (mail: IMail) => {
   const transport = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
-    port: 2525,
+    host: process.env.MAIL_HOST,
+    port: Number(process.env.MAIL_PORT),
     auth: {
-      user: 'b7091194647545',
-      pass: '1aacb46d1cfecf',
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
     },
     tls: {
-      rejectUnauthorized: false,
+      rejectUnauthorized: process.env.MAIL_REJECTUNAUTHORIZED === 'true',
     },
   });
 
