@@ -46,7 +46,7 @@ class ForgotPassword {
 
       return token;
     } catch (error) {
-      throw new AppError(error);
+      throw new AppError('Email not sent, try again.');
     }
   };
 }
