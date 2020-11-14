@@ -6,12 +6,8 @@ import cors from 'cors';
 import connection from '@shared/infra/typeorm';
 
 import ErrorHandle from '@shared/errors/ErrorHandle';
-import dotenv from 'dotenv';
 import routes from './routes';
 
-dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
-});
 class App {
   public app: express.Application;
 
