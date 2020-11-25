@@ -1,48 +1,23 @@
-import path from 'path';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { ConnectionOptions } from 'typeorm';
+import dotenv from 'dotenv';
 
-const ormConfig: PostgresConnectionOptions = {
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
+
+const ormConfig: ConnectionOptions = {
   type: 'postgres',
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  username: process.env.PGUSERNAME,
-  password: () => process.env.PGPASS,
-  database: process.env.PGDATABASE,
-  synchronize: true,
-  logging: false,
-  entities: [
-    path.join(
-      __dirname,
-      '..',
-      'modules',
-      '**',
-      'infra',
-      'typeorm',
-      'entities',
-      '*.ts',
-    ),
-  ],
-  migrations: [
-    path.join(
-      __dirname,
-      '..',
-      'shared',
-      'infra',
-      'typeorm',
-      'migrations',
-      '*.ts',
-    ),
-  ],
+  host: process.env.TYPEORM_HOST,
+  port: Number(process.env.TYPEORM_PORT),
+  username: process.env.TYPEORM_USERNAME,
+  password: () => process.env.TYPEORM_PASSWORD,
+  database: process.env.TYPEORM_DATABASE,
+  synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true',
+  logging: process.env.TYPEORM_LOGGING === 'true',
+  entities: [process.env.TYPEORM_ENTITIES],
+  migrations: [process.env.TYPEORM_MIGRATIONS],
   cli: {
-    entitiesDir: '',
-    migrationsDir: path.join(
-      __dirname,
-      '..',
-      'shared',
-      'infra',
-      'typeorm',
-      'migrations',
-    ),
+    migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
   },
 };
 
