@@ -1,4 +1,5 @@
 import DeleteOrphanageService from '@modules/orphanages/services/DeleteOrphanageService';
+import UpdateOrphanageService from '@modules/orphanages/services/UpdateOrphanageService';
 import { Request, Response, Express } from 'express';
 import { container } from 'tsyringe';
 import FindAllService from '../../../services/FindAllService';
@@ -7,6 +8,15 @@ import ICreateOrphanagesService from '../../../services/ICreateOrphanagesService
 import orphanageView from '../views/orphanages_view';
 
 class OrphanagesController {
+  update = async (request: Request, response: Response): Promise<Response> => {
+    const { id } = request.params;
+
+    const updateOrphanageService = container.resolve(UpdateOrphanageService);
+    await updateOrphanageService.execute(id, request.userId);
+
+    return response.status(204).send();
+  };
+
   delete = async (request: Request, response: Response): Promise<Response> => {
     const { id } = request.params;
 

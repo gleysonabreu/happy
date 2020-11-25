@@ -10,6 +10,10 @@ class OrphanagesRepository implements IOrphanagesRepository {
     this.ormRepository = getRepository(Orphanage);
   }
 
+  update = async (orphanage: Orphanage): Promise<void> => {
+    await this.ormRepository.save({ ...orphanage });
+  };
+
   delete = async (orphanage: Orphanage): Promise<void> => {
     await this.ormRepository.remove(orphanage);
   };
