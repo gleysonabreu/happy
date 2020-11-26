@@ -17,6 +17,7 @@ orphanagesRouter.post(
   upload.array('images'),
   orphanagesController.create,
 );
+orphanagesRouter.put('/:id', [middlewareAuth], orphanagesController.update);
 orphanagesRouter.delete('/:id', [middlewareAuth], orphanagesController.delete);
 
 export default orphanagesRouter;
