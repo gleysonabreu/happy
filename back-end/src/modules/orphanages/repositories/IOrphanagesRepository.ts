@@ -6,5 +6,5 @@ export default interface IOrphanagesRepository {
   findAll(): Promise<Orphanage[] | undefined>;
   findById(_id: string): Promise<Orphanage | undefined>;
   delete(_orphanage: Orphanage): Promise<void>;
-  update(_orphanage: Orphanage): Promise<void>;
+  update(_orphanage: Orphanage): Promise<Orphanage>;
 }
