@@ -371,4 +371,123 @@ describe('Orphanage', () => {
 
     expect(response.status).toBe(400);
   });
+
+  it('should not update the orphanage without being authenticated', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+
+    const orphanageFactory = await useOrphanage();
+    const createOrphanageService = container.resolve(ICreateOrphanagesService);
+
+    const orphanage = await createOrphanageService.execute({
+      about: orphanageFactory.about,
+      instructions: orphanageFactory.instructions,
+      latitude: Number(orphanageFactory.latitude),
+      longitude: Number(orphanageFactory.longitude),
+      name: orphanageFactory.name,
+      open_on_weekends: orphanageFactory.open_on_weekends,
+      opening_hours: orphanageFactory.opening_hours,
+      approved: orphanageFactory.approved,
+      images: [],
+      user: {
+        id: user.createUser.id,
+      },
+    });
+
+    const response = await request(app)
+      .put(`/api/v1/orphanages/${orphanage.id}`)
+      .send({
+        name: 'Testando USER 580',
+        latitude: 254525,
+        longitude: 25548774,
+        about: 'testando',
+        instructions: 'Testando, usar mascara covid-19',
+        opening_hours: '10AM to 7PM',
+        open_on_weekends: 'false',
+      });
+
+    expect(response.status).toBe(401);
+  });
+
+  it('should update the orphanage when authenticated', async () => {
+    const userFac = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+    const user = await userService.execute(userFac);
+
+    const orphanageFactory = await useOrphanage();
+    const createOrphanageService = container.resolve(ICreateOrphanagesService);
+
+    const orphanage = await createOrphanageService.execute({
+      about: orphanageFactory.about,
+      instructions: orphanageFactory.instructions,
+      latitude: Number(orphanageFactory.latitude),
+      longitude: Number(orphanageFactory.longitude),
+      name: orphanageFactory.name,
+      open_on_weekends: orphanageFactory.open_on_weekends,
+      opening_hours: orphanageFactory.opening_hours,
+      approved: orphanageFactory.approved,
+      images: [],
+      user: {
+        id: user.createUser.id,
+      },
+    });
+
+    const response = await request(app)
+      .put(`/api/v1/orphanages/${orphanage.id}`)
+      .send({
+        name: 'Testando USER 580',
+        latitude: 254525,
+        longitude: 25548774,
+        about: 'testando',
+        instructions: 'Testando, usar mascara covid-19',
+        opening_hours: '10AM to 7PM',
+        open_on_weekends: 'false',
+      })
+      .set('Authorization', `Bearer ${user.authentication}`);
+
+    expect(response.status).toBe(200);
+  });
+
+  it('should not update the orphanage without being the owner', async () => {
+    const userFac = await userFactory({});
+    const userFac2 = await userFactory({});
+    const userService = container.resolve(CreateUsersService);
+
+    const user2 = await userService.execute(userFac2);
+    const user = await userService.execute(userFac);
+
+    const orphanageFactory = await useOrphanage();
+    const createOrphanageService = container.resolve(ICreateOrphanagesService);
+
+    const orphanage = await createOrphanageService.execute({
+      about: orphanageFactory.about,
+      instructions: orphanageFactory.instructions,
+      latitude: Number(orphanageFactory.latitude),
+      longitude: Number(orphanageFactory.longitude),
+      name: orphanageFactory.name,
+      open_on_weekends: orphanageFactory.open_on_weekends,
+      opening_hours: orphanageFactory.opening_hours,
+      approved: orphanageFactory.approved,
+      images: [],
+      user: {
+        id: user.createUser.id,
+      },
+    });
+
+    const response = await request(app)
+      .put(`/api/v1/orphanages/${orphanage.id}`)
+      .send({
+        name: 'Testando USER 580',
+        latitude: 254525,
+        longitude: 25548774,
+        about: 'testando',
+        instructions: 'Testando, usar mascara covid-19',
+        opening_hours: '10AM to 7PM',
+        open_on_weekends: 'false',
+      })
+      .set('Authorization', `Bearer ${user2.authentication}`);
+
+    expect(response.status).toBe(400);
+  });
 });
