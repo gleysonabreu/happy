@@ -10,11 +10,32 @@ import orphanageView from '../views/orphanages_view';
 class OrphanagesController {
   update = async (request: Request, response: Response): Promise<Response> => {
     const { id } = request.params;
+    const {
+      name,
+      longitude,
+      latitude,
+      about,
+      instructions,
+      opening_hours,
+      open_on_weekends,
+    } = request.body;
 
     const updateOrphanageService = container.resolve(UpdateOrphanageService);
-    await updateOrphanageService.execute(id, request.userId);
+    const updateOrphanage = await updateOrphanageService.execute(
+      id,
+      request.userId,
+      {
+        name,
+        longitude,
+        latitude,
+        about,
+        instructions,
+        opening_hours,
+        open_on_weekends: open_on_weekends === 'true',
+      },
+    );
 
-    return response.status(204).send();
+    return response.status(204).json(updateOrphanage);
   };
 
   delete = async (request: Request, response: Response): Promise<Response> => {
