@@ -35,7 +35,7 @@ class OrphanagesController {
       },
     );
 
-    return response.status(204).json(updateOrphanage);
+    return response.json(orphanageView.render(updateOrphanage));
   };
 
   delete = async (request: Request, response: Response): Promise<Response> => {
